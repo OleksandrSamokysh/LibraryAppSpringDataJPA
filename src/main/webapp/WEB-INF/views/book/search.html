@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Search book</title>
+</head>
+<body>
+
+<form th:method="POST" th:action="@{/book/search}">
+    <label for="query">Введите поисковый запрос: </label>
+    <input type="text" id="query" name="query"/>
+    <br/>
+    <input type="submit" value="Искать"/>
+</form>
+
+<hr/>
+
+<div th:if="${books}">
+    <div th:if="${books.isEmpty()}">
+        <span>Книг не найдено</span>
+    </div>
+
+    <div th:each="book:${books}">
+        <p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">book</p>
+
+        <div th:if="${book.getHolder() != null}">
+            <span>Книга сейчас у </span> <span th:text="${book.getHolder().getName()}">Person name</span>
+            <span> с </span>
+            <span th:style ="${book.isOverdue()}?'color: red':'color: black'"
+                  th:text="${#dates.format(book.getLastBookOperationsTime(), 'dd-MM-yyyy HH:mm')}">Last operation time
+            </span>
+        </div>
+
+        <div th:if="${book.getHolder() == null}">
+            <span>Книга свободна c </span>
+            <span th:text="${#dates.format(book.getLastBookOperationsTime(), 'dd-MM-yyyy HH:mm')}">Last operation time
+            </span>
+        </div>
+
+        <hr/>
+    </div>
+</div>
+
+
+<form th:action="@{/book}">
+    <button type="submit">К перечню книг</button>
+</form>
+<hr/>
+<form th:action="@{/people}">
+    <button type="submit">К перечню читателей</button>
+</form>
+
+</body>
+</html>

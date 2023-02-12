@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">VALUE</p>
+
+<p th:text="${book.getId()}">VALUE</p>
+
+<form th:action="@{/book/{id}/edit(id=${book.getId()})}">
+    <button type="submit">Изменить</button>
+</form>
+
+<form th:method="DELETE" th:action="@{/book/{id}(id=${book.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
+
+<br/>
+<hr/>
+
+<div th:if="${holder}">
+    <span>Эта книга у
+        <span th:text="${holder.getName()}">VALUE
+        </span>
+    </span>
+    <span> c
+        <span th:text="${#dates.format(book.getLastBookOperationsTime(), 'dd-MM-yyyy HH:mm')}">VALUE
+        </span>
+    </span>
+    <form th:method="PATCH" th:action="@{/book/{id}/clear(id=${book.getId()})}">
+        <button type="submit">Освободить</button>
+    </form>
+</div>
+
+<div th:if="${people}">
+    <span>Эта книга свободна c </span>
+    <span th:text="${#dates.format(book.getLastBookOperationsTime(), 'dd-MM-yyyy HH:mm')}">VALUE
+        </span>
+    <span>. Выберите держателя </span>
+
+    <form th:method="PATCH" th:action="@{/book/{id}/add(id=${book.getId()})}">
+        <label for="person"></label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person : ${people}" th:value="${person.getId()}"
+                    th:text="${person.getName()}"></option>
+        </select>
+
+        <input type="submit" value="Назначить"/>
+    </form>
+</div>
+
+<hr/>
+<form th:action="@{/book}">
+    <button type="submit">К перечню книг</button>
+</form>
+
+<form th:action="@{/people}">
+    <button type="submit">К перечню читателей</button>
+</form>
+
+</body>
+</html>

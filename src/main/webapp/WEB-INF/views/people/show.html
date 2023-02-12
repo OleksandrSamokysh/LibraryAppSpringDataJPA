@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Show</title>
+</head>
+<body>
+<p th:text="${person.getName() + ', ' + person.getAge()}">VALUE</p>
+
+<p th:text="${person.getId()}">VALUE</p>
+
+<form th:action="@{/people/{id}/edit(id=${person.getId()})}">
+    <button type="submit">Изменить</button>
+</form>
+
+<form th:method="DELETE" th:action="@{/people/{id}(id=${person.getId()})}">
+    <input type="submit" value="Удалить"/>
+</form>
+
+<hr/>
+
+<span th:if="${books.isEmpty()}">У читателя нет книг</span>
+
+<div th:if="!${books.isEmpty()}" >
+<span style="font-weight:bold">У читателя эти книги:</span>
+<div th:each="book : ${books}">
+    <a th:href="@{/book/{id}(id=${book.getId()})}"
+       th:style ="${book.isOverdue()}?'color: red':'color: blue'"
+       th:text="${book.getTitle() + ', ' + book.getAuthor() + ', ' + book.getYear()}">
+        book
+    </a>
+</div>
+</div>
+
+<hr/>
+
+<form th:action="@{/book}">
+    <button type="submit">К перечню книг</button>
+</form>
+
+<form th:action="@{/people}">
+    <button type="submit">К перечню читателей</button>
+</form>
+
+</body>
+</html>
